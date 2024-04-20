@@ -1,17 +1,30 @@
-from telegram.ext import CommandHandler
+from aiogram import Bot, Dispatcher, executor, types
+from aiogram.types import ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton
+
+TOKEN = '7104176976:AAEYebrJlRY13xGBOPWApKLdXTTZrqH005s'
+
+bot = Bot(token=TOKEN)
+dp = Dispatcher(bot)
 
 
-async def start(update, context):
-    user = update.effective_user
-    await update.message.reply_html(
-        rf"Привет {user.mention_html()}! Я эхо-бот. Напишите мне что-нибудь, и я пришлю это назад!",
-    )
+@dp.message_handler(commands=['start'])
+async def starting(message: types.Message):
+    sp_buttons = [
+        [
+            types.KeyboardButton(text='Давай начнём'),
+            types.KeyboardButton(text='Нет, спасибо')
+        ],
+    ]
+    keyboard = types.ReplyKeyboardMarkup(keyboard=sp_buttons)
+
+    await message.reply('Привет!\nЯ SurpriseBot\nПомогу тебе с выбором подарка на праздник!',
+                        reply_markup=keyboard)
 
 
-async def help_command(update, context):
-    await update.message.reply_text("Я пока не умею помогать... Я только ваше эхо.")
+@dp.message_handler(commands=['help'])
+async def helping(message: types.Message):
+    await message.reply('Напиши мне одну из команд...ляляляля')
 
 
-
-application.add_handler(CommandHandler("start", start))
-application.add_handler(CommandHandler("help", help_command))
+if __name__ == '__main__':
+    executor.start_polling(dp, skip_updates=True)
