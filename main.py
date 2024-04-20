@@ -22,6 +22,16 @@ async def starting(message: types.Message):
                         reply_markup=keyboard)
 
 
+@dp.message_handler()
+async def otvet_on_button(message: types.Message):
+    if message.text == 'Давай начнём':
+        await message.reply('Хорошо!\nВыберите на какое событие нужен подарок')
+    elif message.text == 'Нет, спасибо':
+        await message.reply('Пока-пока.')
+
+
+
+
 @dp.message_handler(commands=['help'])
 async def helping(message: types.Message):
     await message.reply('Напиши мне одну из команд...ляляляля')
